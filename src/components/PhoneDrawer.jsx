@@ -82,7 +82,7 @@ export default function PersistentDrawerLeft() {
   };
 
   return (
-    <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
+    <Box sx={{ display: { xs: "flex", sm: "flex", md: "none" } }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
         <Toolbar>
@@ -185,7 +185,7 @@ export default function PersistentDrawerLeft() {
       <Main open={open}>
         <DrawerHeader />
         <Typography>
-          Lorem 
+          SADASDASDADSASDASDASD 
         </Typography>
         
       </Main>
