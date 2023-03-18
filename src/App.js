@@ -3,6 +3,8 @@ import { Stack } from "@mui/system";
 import Navbar from "./components/Navbar";
 import Rightbar from "./components/Rightbar";
 import Sidebar from "./components/Sidebar";
+import PhoneDrawer from "./components/PhoneDrawer";
+
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Sidebar />
         <Rightbar />
       </Stack>
+      <PhoneDrawer />
+
     </Box>
   );
 }
