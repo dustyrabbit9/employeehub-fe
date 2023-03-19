@@ -6,7 +6,7 @@ import axios from "axios";
 import { format } from "date-fns";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 295 },
+  { field: "id", headerName: "ID", width: 300 },
   { field: "firstName", headerName: "First name", width: 130 },
   { field: "lastName", headerName: "Last name", width: 130 },
   {
@@ -41,9 +41,9 @@ const columns = [
     width: 100,
   },
   {
-    field: "department",
+    field: "departmentName",
     headerName: "Department",
-    width: 90,
+    width: 200,
   },
 ];
 
