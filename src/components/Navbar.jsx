@@ -9,7 +9,7 @@ const StyledToolbar = styled(Toolbar)({
 
 export default function MenuAppBar() {
   return (
-    <Box sx={{ flexGrow: 1, display: { xs: "none", sm: "none", md: "block" } }}>
+    <Box sx={{ flexGrow: 1, display: { xs: "block", sm: "block", md: "block" } }}>
       <AppBar position="fixed">
         <Toolbar>
           <Typography

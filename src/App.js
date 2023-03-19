@@ -30,7 +30,7 @@ function App() {
           <Route path="/EditDepartments" element={<EditDepartments />} />
         </Routes>
       </Stack>
-      <SmallDrawer />
+      {/* <SmallDrawer /> */}
       {/* <PhoneDrawer /> */}
     </Box>
   );

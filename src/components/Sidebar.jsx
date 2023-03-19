@@ -14,15 +14,15 @@ import BusinessIcon from "@mui/icons-material/Business";
 import EditIcon from "@mui/icons-material/Edit";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = () => {
+  const location = useLocation();
   return (
     <Box
       flex={1}
-      p={2}
+      py={2}
       sx={{
-        padding: 0,
         height: "100vh",
         boxShadow: 2,
         display: { xs: "none", sm: "none", md: "block" },
@@ -30,7 +30,11 @@ const Sidebar = () => {
     >
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/">
+          <ListItemButton
+            component={Link}
+            to="/"
+            selected={location.pathname === "/"}
+          >
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
@@ -40,7 +44,7 @@ const Sidebar = () => {
       </List>
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/Search">
+          <ListItemButton component={Link} to="/Search" selected={location.pathname === "/Search"}>
             <ListItemIcon>
               <SearchIcon />
             </ListItemIcon>
@@ -51,7 +55,7 @@ const Sidebar = () => {
       <Divider />
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/Employees">
+          <ListItemButton component={Link} to="/Employees" selected={location.pathname === "/Employees"}>
             <ListItemIcon>
               <BadgeIcon />
             </ListItemIcon>
@@ -61,7 +65,7 @@ const Sidebar = () => {
       </List>
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/EditEmployees">
+          <ListItemButton component={Link} to="/EditEmployees" selected={location.pathname === "/EditEmployees"}>
             <ListItemIcon>
               <EditIcon />
             </ListItemIcon>
@@ -72,7 +76,7 @@ const Sidebar = () => {
       <Divider />
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/Departments">
+          <ListItemButton component={Link} to="/Departments" selected={location.pathname === "/Departments"}>
             <ListItemIcon>
               <BusinessIcon />
             </ListItemIcon>
@@ -82,7 +86,7 @@ const Sidebar = () => {
       </List>
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/EditDepartments">
+          <ListItemButton component={Link} to="/EditDepartments" selected={location.pathname === "/EditDepartments"}>
             <ListItemIcon>
               <EditIcon />
             </ListItemIcon>
