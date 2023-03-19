@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
@@ -60,20 +60,24 @@ const Employees = () => {
 
   return (
     <Box flex={5} p={2}>
-      <Typography variant="h9" gutterBottom sx={{ fontStyle: "italic" }}>
-        Table View{" "}
-      </Typography>
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
-        Employees List{" "}
-      </Typography>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
-        autoHeight={true}
-        autoWidth={true}
-      />
+      <Box flex={5} p={2}>
+        <Typography variant="h9" gutterBottom sx={{ fontStyle: "italic" }}>
+          Table View{" "}
+        </Typography>
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
+          Employees List{" "}
+        </Typography>
+      </Box>
+      <Paper elevation={2}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+          autoHeight={true}
+          autoWidth={true}
+        />
+      </Paper>
     </Box>
   );
 };
