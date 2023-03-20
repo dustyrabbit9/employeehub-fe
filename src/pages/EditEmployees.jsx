@@ -19,6 +19,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
+import Employees from "./Employees";
+import { id } from "date-fns/locale";
 
 const ModalStyle = {
   position: "absolute",
@@ -55,17 +57,17 @@ const EditEmployees = () => {
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [salary, setSalary] = useState("");
-  const [departmentName, setDepartmentName] = useState("");
   const [departmentId, setDepartmentId] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
 
   // Edit form state
-  const [EditId, setEditId] = useState("");
-  const [EditFirstName, setEditFirstName] = useState("");
-  const [EditLastName, setEditLastName] = useState("");
-  const [EditDob, setEditDob] = useState("");
-  const [EditEmail, setEditEmail] = useState("");
-  const [EditSalary, setEditSalary] = useState("");
-  const [EditDepartmentName, setEditDepartmentName] = useState("");
+  const [editId, setEditId] = useState("");
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
+  const [editDob, setEditDob] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editSalary, setEditSalary] = useState("");
+  const [editDepartmentName, setEditDepartmentName] = useState("");
 
   // GET All Employees
   const getAllEmployees = () => {
@@ -101,12 +103,46 @@ const EditEmployees = () => {
   const [data, setData] = useState([]);
 
   const handleEdit = (id) => {
-    //alert(id);
     handleOpenEdit();
+    axios
+      .get(
+        `https://localhost:7113/api/EmployeeHub/employee/getOneEmployee/${id}`
+      )
+      .then((response) => {
+        setEditFirstName(response.data.firstName);
+        setEditLastName(response.data.lastName);
+        setEditDob(response.data.dob);
+        setEditEmail(response.data.email);
+        setEditSalary(response.data.salary);
+        setEditDepartmentName(response.data.departmentName);
+        setEditId(id);
+
+        getAllEmployees();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getDepartmentName = (id) => {
+    handleOpenEdit();
+    axios
+      .get(
+        `https://localhost:7113/api/EmployeeHub/department/getOneDepartment/${id}`
+      )
+      .then((response) => {
+        setDepartmentName(response.data.departmentName);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete the Employee record?") == true) {
+    if (
+      window.confirm("Are you sure you want to delete the Employee record?") ==
+      true
+    ) {
       axios
         .delete(
           `https://localhost:7113/api/EmployeeHub/employee/deleteEmployee/${id}`
@@ -120,11 +156,22 @@ const EditEmployees = () => {
     }
   };
 
-  const handleUpdate = (id) => {
-    //alert(id);
-    handleOpenEdit();
-  };
+  const handleUpdate = () => {
+    const url = `https://localhost:7113/api/EmployeeHub/employee/updateEmployee/${editId}`;
+    const data = {
+      firstName: editFirstName,
+      lastName: editLastName,
+      email: editEmail,
+      salary: editSalary,
+      dob: editDob,
+      departmentName: editDepartmentName,
+    };
 
+    axios.put(url, data).then((result) => {
+      getAllEmployees();
+      handleCloseEdit();
+    });
+  };
 
   const handleAdd = () => {
     const url = "https://localhost:7113/api/EmployeeHub/employee/addEmployee";
@@ -134,12 +181,11 @@ const EditEmployees = () => {
       email: email,
       salary: salary,
       dob: dob,
-      departmentId: departmentId,
+      departmentName: departmentName,
     };
 
     axios.post(url, data).then((result) => {
       getAllEmployees();
-
       handleCloseAdd();
     });
   };
@@ -217,24 +263,91 @@ const EditEmployees = () => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={ModalStyle}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ fontWeight: "bold", marginBottom: 4 }}
+          >
             Edit Employee{" "}
           </Typography>
-          <Button
-            sx={{ bgcolor: "#ed4856" }}
-            variant="contained"
-            onClick={handleCloseEdit}
+          <TextField
+            fullWidth
+            id="outlined-select-currency"
+            select
+            label="Department"
+            helperText="Please select Department"
+            value={editDepartmentName}
+            sx={{ marginBottom: 3 }}
+            onChange={(e) => setEditDepartmentName(e.target.value)}
           >
-            Cancel
-          </Button>
-          &nbsp;
-          <Button
-            startIcon={<EditIcon />}
-            variant="contained"
-            onClick={handleUpdate}
-          >
-            Update{" "}
-          </Button>
+            {departments.map((department) => (
+              <MenuItem key={department.id} value={department.departmentName}>
+                {department.departmentName}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            onChange={(e) => setEditFirstName(e.target.value)}
+            fullWidth
+            id="outlined-helperText"
+            label="First Name"
+            value={editFirstName}
+            sx={{ marginBottom: 3 }}
+          />
+          <TextField
+            onChange={(e) => setEditLastName(e.target.value)}
+            fullWidth
+            id="outlined-helperText"
+            label="Last Name"
+            value={editLastName}
+            sx={{ marginBottom: 4 }}
+          />
+          <TextField
+            onChange={(e) => setEditDob(e.target.value)}
+            fullWidth
+            id="outlined-helperText"
+            label="DOB"
+            helperText="YYYY-MM-DD"
+            value={editDob}
+            sx={{ marginBottom: 3 }}
+          />
+          <TextField
+            onChange={(e) => setEditEmail(e.target.value)}
+            fullWidth
+            id="outlined-helperText"
+            label="Email"
+            value={editEmail}
+            sx={{ marginBottom: 3 }}
+          />
+          <TextField
+            onChange={(e) => setEditSalary(e.target.value)}
+            fullWidth
+            id="outlined-helperText"
+            label="Salary"
+            helperText="Enter numerical value with no spaces"
+            value={editSalary}
+            sx={{ marginBottom: 3 }}
+            type="number"
+          />
+
+          <Stack>
+            <Button
+              sx={{ bgcolor: "#ed4856" }}
+              variant="contained"
+              onClick={handleCloseEdit}
+            >
+              Cancel
+            </Button>
+            &nbsp;
+            <Button
+              startIcon={<EditIcon />}
+              variant="contained"
+              onClick={(e) => handleUpdate(e)}
+            >
+              Edit Employee{" "}
+            </Button>
+          </Stack>
         </Box>
       </Modal>
       <Stack
@@ -274,10 +387,10 @@ const EditEmployees = () => {
             label="Department"
             helperText="Please select Department"
             sx={{ marginBottom: 3 }}
-            onChange={(e) => setDepartmentId(e.target.value)}
+            onChange={(e) => setDepartmentName(e.target.value)}
           >
             {departments.map((department) => (
-              <MenuItem key={department.id} value={department.id}>
+              <MenuItem key={department.id} value={department.departmentName}>
                 {department.departmentName}
               </MenuItem>
             ))}
