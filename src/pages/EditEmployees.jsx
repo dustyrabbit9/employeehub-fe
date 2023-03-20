@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from "@mui/x-data-grid";
+import { GridRowSelectionModel } from "@mui/x-data-grid";
 
 const columns = [
   { field: "id", headerName: "ID", width: 300 },
@@ -51,16 +52,29 @@ const columns = [
 
 const EditEmployees = () => {
   const [rows, setRows] = useState([]);
-
+  const [selectedRows, setSelectedRows] = React.useState([]);
 
   useEffect(() => {
     axios
       .get("https://localhost:7113/api/EmployeeHub/employee/getAllEmployees")
       .then((response) => {
         setRows(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
 
+  const handleGetSelectedRows = () => {
+    const selectedRowsMap = new Map(selectedRows);
+    console.log(selectedRowsMap);
+    // do something with the selected rows
+  };
+
+
+  useEffect(() => {
+    console.log("Selected rows: ", selectedRows);
+  }, [selectedRows]);
 
   return (
     <Box flex={5} p={2}>
@@ -81,7 +95,10 @@ const EditEmployees = () => {
           autoHeight={true}
           autoWidth={true}
           checkboxSelection
-          
+          gridRowId={(row) => row.id}
+          onSelectionModelChange={(newSelection) => {
+            setSelectedRows(newSelection);
+          }}
         />
       </Paper>
       <Stack
@@ -98,11 +115,11 @@ const EditEmployees = () => {
           sx={{ bgcolor: "#ed4856" }}
           variant="contained"
           endIcon={<DeleteIcon />}
-          onClick={() => {
-            console.log("LOL");
-          }}
         >
           Delete
+        </Button>
+        <Button variant="contained" onClick={handleGetSelectedRows}>
+          Get selected rows
         </Button>
       </Stack>
     </Box>
