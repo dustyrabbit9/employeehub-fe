@@ -12,7 +12,6 @@ import Employees from "./pages/Employees";
 import EditEmployees from "./pages/EditEmployees";
 import Departments from "./pages/Departments";
 import EditDepartments from "./pages/EditDepartments";
-import TestEditEmployees from "./pages/TestEditEmployees"
 
 function App() {
   return (
@@ -27,7 +26,6 @@ function App() {
           <Route path="/Search" element={<Search />} />
           <Route path="/Employees" element={<Employees />} />
           <Route path="/EditEmployees" element={<EditEmployees />} />
-          <Route path="/TestEditEmployees" element={<TestEditEmployees />} />
           <Route path="/Departments" element={<Departments />} />
           <Route path="/EditDepartments" element={<EditDepartments />} />
         </Routes>

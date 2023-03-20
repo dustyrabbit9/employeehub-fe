@@ -1,80 +1,148 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Paper, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import axios from "axios";
-import { format } from "date-fns";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TableHead,
+  Typography,
+  TextField,
+  MenuItem,
+} from "@mui/material";
+import React, { useState, useEffect, Fragment } from "react";
+import Table from "react-bootstrap/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { DataGrid } from "@mui/x-data-grid";
-import { GridRowSelectionModel } from "@mui/x-data-grid";
+import Modal from "@mui/material/Modal";
+import AddIcon from "@mui/icons-material/Add";
+import axios from "axios";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 300 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
-  {
-    field: "dob",
-    headerName: "DOB",
-    valueFormatter: (params) => format(new Date(params.value), "yyyy-MM-dd"),
-    width: 150,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    width: 195,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 90,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  },
-  {
-    field: "salary",
-    headerName: "Salary",
-    width: 100,
-  },
-  {
-    field: "departmentName",
-    headerName: "Department",
-    width: 200,
-  },
-];
+const ModalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const EditEmployees = () => {
-  const [rows, setRows] = useState([]);
-  const [selectedRows, setSelectedRows] = React.useState([]);
+  // Employee state
+  const [rows, setEmployees] = useState([]);
 
-  useEffect(() => {
+  // Department state
+  const [departments, setDepartments] = useState([]);
+
+  // Edit Modal state
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const handleOpenEdit = () => setOpenEdit(true);
+  const handleCloseEdit = () => setOpenEdit(false);
+
+  // Add Modal state
+  const [openAdd, setOpenAdd] = React.useState(false);
+  const handleOpenAdd = () => setOpenAdd(true);
+  const handleCloseAdd = () => setOpenAdd(false);
+
+  // Add form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [dob, setDob] = useState("");
+  const [email, setEmail] = useState("");
+  const [salary, setSalary] = useState("");
+  const [departmentName, setDepartmentName] = useState("");
+  const [departmentId, setDepartmentId] = useState("");
+
+  // Edit form state
+  const [EditId, setEditId] = useState("");
+  const [EditFirstName, setEditFirstName] = useState("");
+  const [EditLastName, setEditLastName] = useState("");
+  const [EditDob, setEditDob] = useState("");
+  const [EditEmail, setEditEmail] = useState("");
+  const [EditSalary, setEditSalary] = useState("");
+  const [EditDepartmentName, setEditDepartmentName] = useState("");
+
+  // GET All Employees
+  const getAllEmployees = () => {
     axios
       .get("https://localhost:7113/api/EmployeeHub/employee/getAllEmployees")
       .then((response) => {
-        setRows(response.data);
+        setEmployees(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  // GET All Departments
+  const getAllDepartments = () => {
+    axios
+      .get(
+        "https://localhost:7113/api/EmployeeHub/department/getAllDepartments"
+      )
+      .then((response) => {
+        setDepartments(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  useEffect(() => {
+    getAllEmployees();
+    getAllDepartments();
   }, []);
 
-  const handleGetSelectedRows = () => {
-    const selectedRowsMap = new Map(selectedRows);
-    console.log(selectedRowsMap);
-    // do something with the selected rows
+  const [data, setData] = useState([]);
+
+  const handleEdit = (id) => {
+    //alert(id);
+    handleOpenEdit();
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete the Employee record?") == true) {
+      axios
+        .delete(
+          `https://localhost:7113/api/EmployeeHub/employee/deleteEmployee/${id}`
+        )
+        .then((result) => {
+          if (result.status === 200) {
+            alert("Employee has been deleted");
+            getAllEmployees();
+          }
+        });
+    }
+  };
+
+  const handleUpdate = (id) => {
+    //alert(id);
+    handleOpenEdit();
   };
 
 
-  useEffect(() => {
-    console.log("Selected rows: ", selectedRows);
-  }, [selectedRows]);
+  const handleAdd = () => {
+    const url = "https://localhost:7113/api/EmployeeHub/employee/addEmployee";
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      salary: salary,
+      dob: dob,
+      departmentId: departmentId,
+    };
+
+    axios.post(url, data).then((result) => {
+      getAllEmployees();
+
+      handleCloseAdd();
+    });
+  };
 
   return (
     <Box flex={5} p={2}>
@@ -86,42 +154,197 @@ const EditEmployees = () => {
           Employees List{" "}
         </Typography>
       </Box>
-      <Paper elevation={2}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          autoHeight={true}
-          autoWidth={true}
-          checkboxSelection
-          gridRowId={(row) => row.id}
-          onSelectionModelChange={(newSelection) => {
-            setSelectedRows(newSelection);
-          }}
-        />
-      </Paper>
+      <TableContainer component={Paper} elevation={4}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell width="5%">#ID</TableCell>
+              <TableCell width="5%">First Name</TableCell>
+              <TableCell width="5%">Last Name </TableCell>
+              <TableCell width="5%">DOB</TableCell>
+              <TableCell width="5%">Age</TableCell>
+              <TableCell width="5%">Email</TableCell>
+              <TableCell width="5%">Salary</TableCell>
+              <TableCell width="5%">Department</TableCell>
+              <TableCell width="10%" align="center">
+                Actions
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {index}
+                </TableCell>
+                <TableCell>{row.firstName}</TableCell>
+                <TableCell>{row.lastName}</TableCell>
+                <TableCell>{row.dob}</TableCell>
+                <TableCell>{row.age}</TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.salary}</TableCell>
+                <TableCell>{row.departmentName}</TableCell>
+                <TableCell colSpan={1} align="right">
+                  <Button
+                    variant="outlined"
+                    startIcon={<EditIcon />}
+                    onClick={() => handleEdit(row.id)}
+                  >
+                    Edit
+                  </Button>
+                  &nbsp;
+                  <Button
+                    sx={{ bgcolor: "#ed4856" }}
+                    variant="contained"
+                    endIcon={<DeleteIcon />}
+                    onClick={() => handleDelete(row.id)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Modal
+        open={openEdit}
+        onClose={handleCloseEdit}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={ModalStyle}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Edit Employee{" "}
+          </Typography>
+          <Button
+            sx={{ bgcolor: "#ed4856" }}
+            variant="contained"
+            onClick={handleCloseEdit}
+          >
+            Cancel
+          </Button>
+          &nbsp;
+          <Button
+            startIcon={<EditIcon />}
+            variant="contained"
+            onClick={handleUpdate}
+          >
+            Update{" "}
+          </Button>
+        </Box>
+      </Modal>
       <Stack
         padding={3}
         direction="row"
         spacing={2}
         justifyContent="flex-end"
-        sx={{ position: "fixed", right: "0" }}
+        sx={{ position: "sticky", right: "0" }}
       >
-        <Button variant="outlined" startIcon={<EditIcon />}>
-          Update
-        </Button>
         <Button
-          sx={{ bgcolor: "#ed4856" }}
           variant="contained"
-          endIcon={<DeleteIcon />}
+          startIcon={<AddIcon />}
+          onClick={handleOpenAdd}
         >
-          Delete
-        </Button>
-        <Button variant="contained" onClick={handleGetSelectedRows}>
-          Get selected rows
+          Add Employee
         </Button>
       </Stack>
+      <Modal
+        open={openAdd}
+        onClose={handleCloseAdd}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={ModalStyle}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ fontWeight: "bold", marginBottom: 4 }}
+          >
+            Add Employee{" "}
+          </Typography>
+          <TextField
+            fullWidth
+            id="outlined-select-currency"
+            select
+            label="Department"
+            helperText="Please select Department"
+            sx={{ marginBottom: 3 }}
+            onChange={(e) => setDepartmentId(e.target.value)}
+          >
+            {departments.map((department) => (
+              <MenuItem key={department.id} value={department.id}>
+                {department.departmentName}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            fullWidth
+            id="outlined-helperText"
+            label="First Name"
+            sx={{ marginBottom: 3 }}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="outlined-helperText"
+            label="Last Name"
+            sx={{ marginBottom: 4 }}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="outlined-helperText"
+            label="DOB"
+            helperText="YYYY-MM-DD"
+            sx={{ marginBottom: 3 }}
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="outlined-helperText"
+            label="Email"
+            sx={{ marginBottom: 3 }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            id="outlined-helperText"
+            label="Salary"
+            helperText="Enter numerical value with no spaces"
+            sx={{ marginBottom: 3 }}
+            type="number"
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+          />
+
+          <Stack>
+            <Button
+              sx={{ bgcolor: "#ed4856" }}
+              variant="contained"
+              onClick={handleCloseAdd}
+            >
+              Cancel
+            </Button>
+            &nbsp;
+            <Button
+              startIcon={<EditIcon />}
+              variant="contained"
+              onClick={(e) => handleAdd(e)}
+            >
+              Add Employee{" "}
+            </Button>
+          </Stack>
+        </Box>
+      </Modal>
     </Box>
   );
 };

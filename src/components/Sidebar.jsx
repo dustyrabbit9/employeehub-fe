@@ -66,7 +66,7 @@ const Sidebar = () => {
       </List>
       <List disablePadding>
         <ListItem>
-          <ListItemButton component={Link} to="/TestEditEmployees" selected={location.pathname === "/TestEditEmployees"}>
+          <ListItemButton component={Link} to="/EditEmployees" selected={location.pathname === "/EditEmployees"}>
             <ListItemIcon>
               <EditIcon />
             </ListItemIcon>
