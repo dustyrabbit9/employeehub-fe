@@ -6,7 +6,12 @@ import axios from "axios";
 import { format } from "date-fns";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 300 },
+  {
+    field: "id",
+    description: "Database ID",
+    headerName: "ID",
+    width: 310,
+  },
   { field: "firstName", headerName: "First name", width: 130 },
   { field: "lastName", headerName: "Last name", width: 130 },
   {
@@ -29,9 +34,9 @@ const columns = [
   {
     field: "fullName",
     headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
+    description: "This column is not sortable.",
     sortable: false,
-    width: 160,
+    width: 220,
     valueGetter: (params) =>
       `${params.row.firstName || ""} ${params.row.lastName || ""}`,
   },

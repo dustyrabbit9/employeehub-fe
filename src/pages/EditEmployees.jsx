@@ -19,8 +19,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
-import Employees from "./Employees";
-import { id } from "date-fns/locale";
 
 const ModalStyle = {
   position: "absolute",
@@ -38,6 +36,7 @@ const EditEmployees = () => {
   // Employee state
   const [rows, setEmployees] = useState([]);
 
+  const [newDate, setNewDate] = useState([]);
   // Department state
   const [departments, setDepartments] = useState([]);
 
@@ -57,7 +56,6 @@ const EditEmployees = () => {
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [salary, setSalary] = useState("");
-  const [departmentId, setDepartmentId] = useState("");
   const [departmentName, setDepartmentName] = useState("");
 
   // Edit form state
@@ -184,11 +182,20 @@ const EditEmployees = () => {
       departmentName: departmentName,
     };
 
-    axios.post(url, data).then((result) => {
-      getAllEmployees();
-      handleCloseAdd();
-    });
+    axios
+      .post(url, data)
+      .then((result) => {
+        getAllEmployees();
+        handleCloseAdd();
+      })
+      .catch((error) => {
+        if (error) {
+          alert(error.response.data.errors); 
+        }
+      });
   };
+
+  const pattern = /^[a-zA-Z]+$/; 
 
   return (
     <Box flex={5} p={2}>
@@ -199,16 +206,25 @@ const EditEmployees = () => {
         <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
           Employees List{" "}
         </Typography>
+        <Button
+          variant="contained"
+          sx={{position: "fixed", right: 35, top: 115}}
+          startIcon={<AddIcon />}
+          onClick={handleOpenAdd}
+        >
+          Add Employee
+        </Button>
       </Box>
+
       <TableContainer component={Paper} elevation={4}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell width="5%">#ID</TableCell>
+              <TableCell width="1%">ID</TableCell>
               <TableCell width="5%">First Name</TableCell>
               <TableCell width="5%">Last Name </TableCell>
               <TableCell width="5%">DOB</TableCell>
-              <TableCell width="5%">Age</TableCell>
+              <TableCell width="1%">Age</TableCell>
               <TableCell width="5%">Email</TableCell>
               <TableCell width="5%">Salary</TableCell>
               <TableCell width="5%">Department</TableCell>
@@ -217,6 +233,7 @@ const EditEmployees = () => {
               </TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
             {rows.map((row, index) => (
               <TableRow
@@ -237,6 +254,7 @@ const EditEmployees = () => {
                   <Button
                     variant="outlined"
                     startIcon={<EditIcon />}
+                    size="small"
                     onClick={() => handleEdit(row.id)}
                   >
                     Edit
@@ -246,6 +264,7 @@ const EditEmployees = () => {
                     sx={{ bgcolor: "#ed4856" }}
                     variant="contained"
                     endIcon={<DeleteIcon />}
+                    size="small"
                     onClick={() => handleDelete(row.id)}
                   >
                     Delete
@@ -350,21 +369,7 @@ const EditEmployees = () => {
           </Stack>
         </Box>
       </Modal>
-      <Stack
-        padding={3}
-        direction="row"
-        spacing={2}
-        justifyContent="flex-end"
-        sx={{ position: "sticky", right: "0" }}
-      >
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleOpenAdd}
-        >
-          Add Employee
-        </Button>
-      </Stack>
+
       <Modal
         open={openAdd}
         onClose={handleCloseAdd}
@@ -381,6 +386,7 @@ const EditEmployees = () => {
             Add Employee{" "}
           </Typography>
           <TextField
+            required
             fullWidth
             id="outlined-select-currency"
             select
@@ -400,6 +406,7 @@ const EditEmployees = () => {
             id="outlined-helperText"
             label="First Name"
             sx={{ marginBottom: 3 }}
+            inputProps={{ pattern: pattern }}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
