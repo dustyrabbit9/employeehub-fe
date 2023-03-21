@@ -14,5 +14,8 @@ export const theme = createTheme({
     otherColor: {
       main: "#146C94",
     },
+    redColor: {
+      main: "#ed4856",
+    }
   },
 });

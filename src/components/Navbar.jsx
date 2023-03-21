@@ -32,18 +32,6 @@ export default function MenuAppBar() {
           >
             EmployeeHub
           </Typography>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{
-              display: { xs: "block", sm: "none" },
-              flexGrow: 1,
-              textAlign: "center",
-              fontWeight: "bold",
-            }}
-          >
-            EmployeeHub
-          </Typography>
           <Box sx={{ display: { xs: "block", sm: "block", md: "none" } }}>
             <ButtonGroup
               variant="contained"

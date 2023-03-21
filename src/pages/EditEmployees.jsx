@@ -119,6 +119,7 @@ const EditEmployees = () => {
       })
       .catch((error) => {
         console.error(error);
+        alert("Please check if the input values you have entered are proper!");
       });
   };
 
@@ -168,6 +169,13 @@ const EditEmployees = () => {
     axios.put(url, data).then((result) => {
       getAllEmployees();
       handleCloseEdit();
+    }).catch((error) => {
+      if (error) {
+        console.log(error);
+        alert(
+          "Please check if the input values you have entered are proper!"
+        );
+      }
     });
   };
 
@@ -190,12 +198,15 @@ const EditEmployees = () => {
       })
       .catch((error) => {
         if (error) {
-          alert(error.response.data.errors); 
+          console.log(error);
+          alert(
+            "Please check if the input values you have entered are proper!"
+          );
         }
       });
   };
 
-  const pattern = /^[a-zA-Z]+$/; 
+  const pattern = /^[a-zA-Z]+$/;
 
   return (
     <Box flex={5} p={2}>
@@ -208,7 +219,7 @@ const EditEmployees = () => {
         </Typography>
         <Button
           variant="contained"
-          sx={{position: "sticky", right: 35, top: 115}}
+          sx={{ position: "sticky", right: 35, top: 115 }}
           startIcon={<AddIcon />}
           onClick={handleOpenAdd}
         >
