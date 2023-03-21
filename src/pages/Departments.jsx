@@ -7,9 +7,16 @@ const columns = [
   {
     field: "departmentName",
     headerName: "Department Name",
-    minWidth: 50,
-    flex: 1,
+    minWidth: 10,
+    flex: 0.2,
   },
+  {
+    field: "id",
+    headerName: "Department ID",
+    minWidth: 10,
+    flex: 0.5,
+  },
+ 
 ];
 
 const Departments = () => {
@@ -42,7 +49,6 @@ const Departments = () => {
           pageSize={5}
           rowsPerPageOptions={[5]}
           autoHeight={true}
-          autoWidth={true}
         />
       </Paper>
     </Box>
