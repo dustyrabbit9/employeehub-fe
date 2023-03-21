@@ -1,6 +1,7 @@
 # employeehub-fe
 
-Frontend built for employeehub project built using ReactJS. Project initiated using create-react-app. 
+Frontend built for employeehub project built using ReactJS. Project initiated using `create-react-app`
+- UI Elements created using React **Material UI**
 
 ## Run the project with `npm start`
 
