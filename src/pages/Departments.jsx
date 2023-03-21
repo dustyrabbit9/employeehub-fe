@@ -5,14 +5,10 @@ import { DataGrid } from "@mui/x-data-grid";
 
 const columns = [
   {
-    field: "id",
-    headerName: "ID",
-    width: 310,
-  },
-  {
     field: "departmentName",
     headerName: "Department Name",
-    width: 200,
+    minWidth: 50,
+    flex: 1,
   },
 ];
 
@@ -36,10 +32,10 @@ const Departments = () => {
           Table View{" "}
         </Typography>
         <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
-          Employees List{" "}
+          Departments List{" "}
         </Typography>
       </Box>
-      <Paper elevation={2} sx={{width: '40%' }}>
+      <Paper elevation={2}>
         <DataGrid
           rows={rows}
           columns={columns}

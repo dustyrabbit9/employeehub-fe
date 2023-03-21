@@ -208,7 +208,7 @@ const EditEmployees = () => {
         </Typography>
         <Button
           variant="contained"
-          sx={{position: "fixed", right: 35, top: 115}}
+          sx={{position: "sticky", right: 35, top: 115}}
           startIcon={<AddIcon />}
           onClick={handleOpenAdd}
         >

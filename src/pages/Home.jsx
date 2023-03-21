@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
 import React from "react";
+import ReactMarkdown from "react-markdown";
 
 const home = () => {
   return (
     <Box
-      bgcolor={"skyBlue"}
       flex={5}
       p={2}
     >
-      HOME
+      Home
     </Box>
   );
 };
