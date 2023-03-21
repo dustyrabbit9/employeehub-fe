@@ -5,6 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { format } from "date-fns";
 
+// DataGrid Employees columns
 const columns = [
   { field: "firstName", headerName: "First name", width: 130 },
   { field: "lastName", headerName: "Last name", width: 130 },
@@ -47,8 +48,10 @@ const columns = [
 ];
 
 const Employees = () => {
+  // Rows state
   const [rows, setRows] = useState([]);
 
+  // GET All Employees
   useEffect(() => {
     axios
       .get("https://localhost:7113/api/EmployeeHub/employee/getAllEmployees")

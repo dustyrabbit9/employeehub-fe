@@ -19,6 +19,7 @@ import Modal from "@mui/material/Modal";
 import AddIcon from "@mui/icons-material/Add";
 import axios from "axios";
 
+// Styles for Modal Form pop-up
 const ModalStyle = {
   position: "absolute",
   top: "50%",
@@ -32,6 +33,7 @@ const ModalStyle = {
 };
 
 const EditDepartments = () => {
+  // Departments state
   const [rows, setDepartments] = useState([]);
 
   // Edit Modal state
@@ -65,10 +67,7 @@ const EditDepartments = () => {
       });
   };
 
-  useEffect(() => {
-    getAllDepartments();
-  }, []);
-
+  // EDIT a Department
   const handleEdit = (id) => {
     handleOpenEdit();
     axios
@@ -86,24 +85,12 @@ const EditDepartments = () => {
       });
   };
 
-  const getDepartmentName = (id) => {
-    handleOpenEdit();
-    axios
-      .get(
-        `https://localhost:7113/api/EmployeeHub/department/getOneDepartment/${id}`
-      )
-      .then((response) => {
-        setDepartmentName(response.data.departmentName);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
+  // DELETE a Department
   const handleDelete = (id) => {
     if (
-      window.confirm("Are you sure you want to delete the Employee record?") ==
-      true
+      window.confirm(
+        "Are you sure you want to delete the Department record?"
+      ) == true
     ) {
       axios
         .delete(
@@ -118,16 +105,20 @@ const EditDepartments = () => {
     }
   };
 
+  // UPDATE a Department
   const handleUpdate = () => {
     const url = `https://localhost:7113/api/EmployeeHub/department/updateDepartment/${editId}`;
     const data = {
       departmentName: editDepartmentName,
     };
 
-    axios.put(url, data).then((result) => {
-      getAllDepartments();
-      handleCloseEdit();
-    }).catch((error) => {
+    axios
+      .put(url, data)
+      .then((result) => {
+        getAllDepartments();
+        handleCloseEdit();
+      })
+      .catch((error) => {
         if (error) {
           console.log(error);
           alert(
@@ -137,6 +128,7 @@ const EditDepartments = () => {
       });
   };
 
+  // ADD a Department
   const handleAdd = () => {
     const url =
       "https://localhost:7113/api/EmployeeHub/department/addDepartment";
@@ -159,6 +151,11 @@ const EditDepartments = () => {
         }
       });
   };
+
+  // useEffect hook used to fetch all Departments
+  useEffect(() => {
+    getAllDepartments();
+  }, []);
 
   return (
     <Box flex={5} p={2}>

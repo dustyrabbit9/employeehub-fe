@@ -36,7 +36,6 @@ const EditEmployees = () => {
   // Employee state
   const [rows, setEmployees] = useState([]);
 
-  const [newDate, setNewDate] = useState([]);
   // Department state
   const [departments, setDepartments] = useState([]);
 
@@ -93,13 +92,7 @@ const EditEmployees = () => {
       });
   };
 
-  useEffect(() => {
-    getAllEmployees();
-    getAllDepartments();
-  }, []);
-
-  const [data, setData] = useState([]);
-
+  // EDIT an Employee
   const handleEdit = (id) => {
     handleOpenEdit();
     axios
@@ -123,23 +116,10 @@ const EditEmployees = () => {
       });
   };
 
-  const getDepartmentName = (id) => {
-    handleOpenEdit();
-    axios
-      .get(
-        `https://localhost:7113/api/EmployeeHub/department/getOneDepartment/${id}`
-      )
-      .then((response) => {
-        setDepartmentName(response.data.departmentName);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
+  // DELETE Employee record
   const handleDelete = (id) => {
     if (
-      window.confirm("Are you sure you want to delete the Department record?") ==
+      window.confirm("Are you sure you want to delete the Employee record?") ==
       true
     ) {
       axios
@@ -155,6 +135,7 @@ const EditEmployees = () => {
     }
   };
 
+  // UPDATE an Employee record
   const handleUpdate = () => {
     const url = `https://localhost:7113/api/EmployeeHub/employee/updateEmployee/${editId}`;
     const data = {
@@ -166,19 +147,23 @@ const EditEmployees = () => {
       departmentName: editDepartmentName,
     };
 
-    axios.put(url, data).then((result) => {
-      getAllEmployees();
-      handleCloseEdit();
-    }).catch((error) => {
-      if (error) {
-        console.log(error);
-        alert(
-          "Please check if the input values you have entered are proper!"
-        );
-      }
-    });
+    axios
+      .put(url, data)
+      .then((result) => {
+        getAllEmployees();
+        handleCloseEdit();
+      })
+      .catch((error) => {
+        if (error) {
+          console.log(error);
+          alert(
+            "Please check if the input values you have entered are proper!"
+          );
+        }
+      });
   };
 
+  // ADD an Employee
   const handleAdd = () => {
     const url = "https://localhost:7113/api/EmployeeHub/employee/addEmployee";
     const data = {
@@ -206,7 +191,11 @@ const EditEmployees = () => {
       });
   };
 
-  const pattern = /^[a-zA-Z]+$/;
+  // useEffect hook used to fetch all Employees and Departments
+  useEffect(() => {
+    getAllEmployees();
+    getAllDepartments();
+  }, []);
 
   return (
     <Box flex={5} p={2}>
@@ -417,7 +406,6 @@ const EditEmployees = () => {
             id="outlined-helperText"
             label="First Name"
             sx={{ marginBottom: 3 }}
-            inputProps={{ pattern: pattern }}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />

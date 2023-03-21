@@ -3,6 +3,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
 
+// DataGrid Departments columns
 const columns = [
   {
     field: "departmentName",
@@ -20,8 +21,10 @@ const columns = [
 ];
 
 const Departments = () => {
+  // Rows state
   const [rows, setRows] = useState([]);
 
+  // GET All Departments 
   useEffect(() => {
     axios
       .get(
