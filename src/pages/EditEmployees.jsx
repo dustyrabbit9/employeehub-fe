@@ -139,7 +139,7 @@ const EditEmployees = () => {
 
   const handleDelete = (id) => {
     if (
-      window.confirm("Are you sure you want to delete the Employee record?") ==
+      window.confirm("Are you sure you want to delete the Department record?") ==
       true
     ) {
       axios
