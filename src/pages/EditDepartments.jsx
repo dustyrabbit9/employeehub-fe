@@ -11,7 +11,6 @@ import {
   TableHead,
   Typography,
   TextField,
-
 } from "@mui/material";
 import Table from "react-bootstrap/Table";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -128,7 +127,14 @@ const EditDepartments = () => {
     axios.put(url, data).then((result) => {
       getAllDepartments();
       handleCloseEdit();
-    });
+    }).catch((error) => {
+        if (error) {
+          console.log(error);
+          alert(
+            "Please check if the input values you have entered are proper!"
+          );
+        }
+      });
   };
 
   const handleAdd = () => {
@@ -146,7 +152,10 @@ const EditDepartments = () => {
       })
       .catch((error) => {
         if (error) {
-          alert(error.response.data.errors); 
+          console.log(error);
+          alert(
+            "Please check if the input values you have entered are proper!"
+          );
         }
       });
   };
@@ -279,7 +288,7 @@ const EditDepartments = () => {
             component="h2"
             sx={{ fontWeight: "bold", marginBottom: 4 }}
           >
-            Add Employee{" "}
+            Add Department{" "}
           </Typography>
 
           <TextField
