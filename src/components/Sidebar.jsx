@@ -43,16 +43,6 @@ const Sidebar = () => {
           </ListItemButton>
         </ListItem>
       </List>
-      <List disablePadding>
-        <ListItem>
-          <ListItemButton component={Link} to="/Search" selected={location.pathname === "/Search"}>
-            <ListItemIcon>
-              <SearchIcon />
-            </ListItemIcon>
-            <ListItemText primary="Search" />
-          </ListItemButton>
-        </ListItem>
-      </List>
       <Divider />
       <List disablePadding>
         <ListItem>
